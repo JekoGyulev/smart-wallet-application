@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface WalletService {
 
-    void createNewWallet(User user);
+    Wallet createNewWallet(User user);
 
     Transaction topUp(UUID walletId, BigDecimal amount);
 

@@ -58,17 +58,19 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         // Create Wallet
-        walletService.createNewWallet(user);
+        Wallet wallet = walletService.createNewWallet(user);
 
         // Assign a free subscription to the user upon registration
-        subscriptionService.createDefaultSubscription(user);
+        Subscription defaultSubscription = subscriptionService.createDefaultSubscription(user);
+
+        user.setWallets(List.of(wallet));
+        user.setSubscriptions(List.of(defaultSubscription));
 
         // Log info about registration
         log.info("Successfully created new user account for username [%s] and id [%s]"
                 .formatted(user.getUsername(), user.getId()));
 
         return user;
-
     }
 
     @Override
@@ -90,6 +92,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getByUsername(String username) {
+        return this.userRepository.findByUsername(username).get();
+    }
+
+    @Override
     public List<User> getAllUsers() {
         return this.userRepository.findAll();
     }
@@ -97,7 +104,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getById(UUID id) {
         return this.userRepository.findById(id)
-                .orElseThrow(() -> new DomainException("User with id '%s' not found".formatted(id)));
+                .orElseThrow(() -> new DomainException("User with id ['%s'] not found".formatted(id)));
     }
 
     @Override

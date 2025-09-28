@@ -28,22 +28,5 @@ public class UserInit implements CommandLineRunner {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }

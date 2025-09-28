@@ -29,13 +29,15 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public void createDefaultSubscription(User user) {
+    public Subscription createDefaultSubscription(User user) {
         Subscription subscription = initSubscription(user);
 
         this.subscriptionRepository.save(subscription);
 
         log.info("Successfully created new subscription with id [%s] and type [%s]"
                 .formatted(subscription.getId(), subscription.getType()));
+
+        return subscription;
     }
 
     @Override

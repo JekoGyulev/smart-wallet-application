@@ -6,7 +6,6 @@ import app.transaction.enums.TransactionType;
 import app.transaction.model.Transaction;
 import app.transaction.service.TransactionService;
 import app.user.model.User;
-import app.user.service.UserService;
 import app.wallet.enums.WalletStatus;
 import app.wallet.model.Wallet;
 import app.wallet.repository.WalletRepository;
@@ -17,11 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Currency;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -39,7 +36,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public void createNewWallet(User user) {
+    public Wallet createNewWallet(User user) {
         Wallet wallet = initWallet(user);
 
         this.walletRepository.save(wallet);
@@ -47,6 +44,7 @@ public class WalletServiceImpl implements WalletService {
         log.info("Successfully created new wallet with id [%s] and balance %.2f"
                 .formatted(wallet.getId(), wallet.getBalance()));
 
+        return wallet;
     }
 
     @Override

@@ -3,7 +3,6 @@ package app.web.dto;
 import app.user.enums.Country;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.hibernate.validator.constraints.Length;
 
 public class RegisterRequest {
     @Size(min = 6, message = "Username must be at least 6 characters")
@@ -12,6 +11,8 @@ public class RegisterRequest {
     private String password;
     @NotNull
     private Country country;
+
+    public RegisterRequest() {}
 
     public RegisterRequest(String username, String password, Country country) {
         this.username = username;

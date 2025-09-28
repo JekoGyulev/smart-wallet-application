@@ -5,7 +5,7 @@ import app.user.model.User;
 
 public interface SubscriptionService {
 
-    void createDefaultSubscription(User user);
+    Subscription createDefaultSubscription(User user);
 
     long countTotalDefaultSubscriptions();
     long countTotalPremiumSubscriptions();

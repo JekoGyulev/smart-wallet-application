@@ -13,6 +13,8 @@ public interface UserService {
 
     User loginUser(LoginRequest request);
 
+    User getByUsername(String username);
+
     List<User> getAllUsers();
 
     User getById(UUID id);
