@@ -2,6 +2,7 @@ package app.web.controller;
 
 import app.user.model.User;
 import app.user.service.UserService;
+import app.web.dto.LoginRequest;
 import app.web.dto.RegisterRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,17 @@ public class IndexController {
     }
 
     @GetMapping("/login")
-    public String getLoginPage() {
-        return "login";
+    public ModelAndView getLoginPage() {
+        ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.setViewName("login");
+        modelAndView.addObject("loginRequest", new LoginRequest());
+
+        return modelAndView;
     }
+
+
+
 
     @GetMapping("/register")
     public ModelAndView getRegisterPage() {

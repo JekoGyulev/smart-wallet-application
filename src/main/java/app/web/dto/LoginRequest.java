@@ -9,6 +9,8 @@ public class LoginRequest {
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
+    public LoginRequest() {}
+
     public LoginRequest(String username, String password) {
         this.username = username;
         this.password = password;
