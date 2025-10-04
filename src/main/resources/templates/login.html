@@ -24,15 +24,17 @@
       </a>
     </div>
 
-    <form class="form">
+    <form class="form" th:action="@{/login}" th:method="post" th:object="${loginRequest}">
 
       <h3>Login Here</h3>
 
       <label for="username">Username</label>
-      <input type="text" placeholder="Username" id="username">
+      <input type="text" placeholder="Username" id="username" th:field="*{username}">
+      <p th:if="${#fields.hasErrors()}" th:errors="*{username}" class="alert-warning"></p>
 
       <label for="password">Password</label>
-      <input type="password" placeholder="Password" id="password">
+      <input type="password" placeholder="Password" id="password" th:field="*{password}">
+      <p th:if="${#fields.hasErrors()}" th:errors="*{password}" class="alert-warning"></p>
 
       <button type="submit">Log In</button>
 

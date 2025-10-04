@@ -7,6 +7,7 @@ import app.web.dto.RegisterRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -42,7 +43,18 @@ public class IndexController {
         return modelAndView;
     }
 
+    @PostMapping("/login")
+    public ModelAndView login(@Valid @ModelAttribute LoginRequest loginRequest,
+                              BindingResult bindingResul) {
 
+        if (bindingResul.hasErrors()) {
+            return new ModelAndView("login");
+        }
+
+        this.userService.loginUser(loginRequest);
+
+        return new ModelAndView("redirect:/home");
+    }
 
 
     @GetMapping("/register")
