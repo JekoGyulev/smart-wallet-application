@@ -97,6 +97,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
+    @Transactional
     public Transaction charge(User user, UUID walletId, BigDecimal amount, String chargeDescription) {
 
         Wallet wallet = getWalletById(walletId);
