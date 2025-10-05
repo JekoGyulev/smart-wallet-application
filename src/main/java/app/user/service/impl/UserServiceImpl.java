@@ -5,6 +5,7 @@ import app.subscription.model.Subscription;
 import app.subscription.service.SubscriptionService;
 import app.user.enums.UserRole;
 import app.user.model.User;
+import app.user.property.UserProperties;
 import app.user.repository.UserRepository;
 import app.user.service.UserService;
 
@@ -32,15 +33,24 @@ public class UserServiceImpl implements UserService {
     private final WalletService walletService;
     private final SubscriptionService subscriptionService;
     private final PasswordEncoder passwordEncoder;
+    private final UserProperties userProperties;
+
+
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, WalletService walletService, SubscriptionService subscriptionService, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, WalletService walletService, SubscriptionService subscriptionService, PasswordEncoder passwordEncoder, UserProperties userProperties) {
         this.userRepository = userRepository;
         this.walletService = walletService;
         this.subscriptionService = subscriptionService;
         this.passwordEncoder = passwordEncoder;
+        this.userProperties = userProperties;
     }
 
+
+    @Override
+    public User getDefaultUser() {
+        return getByUsername(this.userProperties.getDefaultUser().getUsername());
+    }
 
     @Override
     @Transactional

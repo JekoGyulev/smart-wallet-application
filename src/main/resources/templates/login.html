@@ -30,11 +30,11 @@
 
       <label for="username">Username</label>
       <input type="text" placeholder="Username" id="username" th:field="*{username}">
-      <p th:if="${#fields.hasErrors()}" th:errors="*{username}" class="alert-warning"></p>
+      <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="alert-warning"></p>
 
       <label for="password">Password</label>
       <input type="password" placeholder="Password" id="password" th:field="*{password}">
-      <p th:if="${#fields.hasErrors()}" th:errors="*{password}" class="alert-warning"></p>
+      <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="alert-warning"></p>
 
       <button type="submit">Log In</button>
 

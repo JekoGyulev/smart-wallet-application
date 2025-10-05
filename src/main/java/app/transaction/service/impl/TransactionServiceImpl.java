@@ -82,4 +82,9 @@ public class TransactionServiceImpl implements TransactionService {
                 .filter(transaction -> transaction.getStatus() == TransactionStatus.FAILED)
                 .count();
     }
+
+    @Override
+    public Transaction getById(UUID id) {
+        return this.transactionRepository.findById(id).orElseThrow(() -> new RuntimeException("Transaction not found"));
+    }
 }

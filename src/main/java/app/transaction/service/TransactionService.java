@@ -26,4 +26,5 @@ public interface TransactionService {
     long countTotalSucceededTransactions();
     long countTotalFailedTransactions();
 
+    Transaction getById(UUID id);
 }
