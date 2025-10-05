@@ -5,9 +5,9 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.URL;
 
 public class ProfileEditRequest {
-    @Size(min = 2)
+    @Size(min = 2, max = 100)
     private String firstName;
-    @Size(min = 2)
+    @Size(min = 2, max = 100)
     private String lastName;
     @Email
     private String emailAddress;

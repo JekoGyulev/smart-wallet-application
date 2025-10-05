@@ -116,19 +116,23 @@
         </div>
       </div>
 
-      <form class="form">
+      <form class="form" th:action="@{'/users/' + ${user.id} + '/profile'}" th:method="put" th:object="${profileEditRequest}">
 
         <label for="firstName">First Name</label>
-        <input type="text" id="firstName" placeholder="First Name">
+        <input type="text" id="firstName" placeholder="First Name" th:field="*{firstName}">
+        <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="alert-warning"></p>
 
         <label for="lastName">Last Name</label>
-        <input type="text" id="lastName" placeholder="Last Name">
+        <input type="text" id="lastName" placeholder="Last Name" th:field="*{lastName}">
+        <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="alert-warning"></p>
 
         <label for="email">Email</label>
-        <input type="text" id="email" placeholder="Email Address">
+        <input type="text" id="email" placeholder="Email Address" th:field="*{emailAddress}">
+        <p th:if="${#fields.hasErrors('emailAddress')}" th:errors="*{emailAddress}" class="alert-warning"></p>
 
         <label for="profilePicture">Profile Picture URL</label>
-        <input type="text" id="profilePicture" placeholder="Image Link">
+        <input type="text" id="profilePicture" placeholder="Image Link" th:field="*{profilePictureUrl}">
+        <p th:if="${#fields.hasErrors('profilePictureUrl')}" th:errors="*{profilePictureUrl}" class="alert-warning"></p>
 
         <button class="profile-actions-button">
           <p>Save</p>

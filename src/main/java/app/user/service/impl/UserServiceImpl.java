@@ -12,6 +12,7 @@ import app.user.service.UserService;
 import app.wallet.model.Wallet;
 import app.wallet.service.WalletService;
 import app.web.dto.LoginRequest;
+import app.web.dto.ProfileEditRequest;
 import app.web.dto.RegisterRequest;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -152,6 +154,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public long countUsersWithWallets(int countWallets) {
         return this.userRepository.countByCountWallet(countWallets);
+    }
+
+    @Override
+    public void updateProfile(User user, ProfileEditRequest profileEditRequest) {
+
+        user.setFirstName(profileEditRequest.getFirstName());
+        user.setLastName(profileEditRequest.getLastName());
+        user.setEmail(profileEditRequest.getEmailAddress());
+        user.setProfilePicture(profileEditRequest.getProfilePictureUrl());
+        user.setUpdatedOn(LocalDateTime.now());
+
+        this.userRepository.save(user);
     }
 
 
