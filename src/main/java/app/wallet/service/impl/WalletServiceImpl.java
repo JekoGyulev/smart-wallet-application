@@ -157,7 +157,7 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     @Transactional
-    public Transaction transfer(@Valid TransferRequest transferRequest) {
+    public Transaction transfer(TransferRequest transferRequest) {
 
         Wallet senderWallet = this.getWalletById(transferRequest.getWalletId());
 
@@ -176,16 +176,12 @@ public class WalletServiceImpl implements WalletService {
                 );
 
 
-
-
-
         Transaction withdrawalTransaction = withdrawal(senderWallet.getOwner(), senderWallet.getId(),
                 transferRequest.getAmount(), transferDescription);
 
-        Transaction depositTransaction = deposit(receiverWallet.getId(), transferRequest.getAmount(),
-                transferDescription);
-
-
+        if (withdrawalTransaction.getStatus() == TransactionStatus.SUCCEEDED) {
+            deposit(receiverWallet.getId(), transferRequest.getAmount(), transferDescription);
+        }
 
         return withdrawalTransaction;
     }

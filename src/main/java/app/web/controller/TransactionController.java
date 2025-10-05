@@ -6,6 +6,7 @@ import app.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -35,6 +36,17 @@ public class TransactionController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("transactions");
         modelAndView.addObject("transactions", transactions);
+
+        return modelAndView;
+    }
+    @GetMapping("/{id}")
+    public ModelAndView showTransaction(@PathVariable UUID id) {
+
+        Transaction transaction = this.transactionService.getById(id);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("transaction-result");
+        modelAndView.addObject("transaction", transaction);
 
         return modelAndView;
     }
