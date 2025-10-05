@@ -1,6 +1,7 @@
 package app.web.controller;
 
 import app.user.model.User;
+import app.user.property.UserProperties;
 import app.user.service.UserService;
 import app.web.dto.LoginRequest;
 import app.web.dto.RegisterRequest;
@@ -22,10 +23,12 @@ import java.util.UUID;
 public class IndexController {
 
     private final UserService userService;
+    private final UserProperties userProperties;
 
     @Autowired
-    public IndexController(UserService userService) {
+    public IndexController(UserService userService, UserProperties userProperties) {
         this.userService = userService;
+        this.userProperties = userProperties;
     }
 
     @GetMapping("/")
@@ -83,7 +86,7 @@ public class IndexController {
     @GetMapping("/home")
     public ModelAndView getHomePage() {
         // This will be changed in the future (no hardcoding)
-        User user = this.userService.getById(UUID.fromString("3a04b935-1067-4941-9783-d424b678190b"));
+        User user = this.userService.getByUsername(this.userProperties.getDefaultUser().getUsername());
 
         ModelAndView modelAndView = new ModelAndView("home");
         modelAndView.addObject("user", user);

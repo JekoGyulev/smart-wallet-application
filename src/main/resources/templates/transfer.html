@@ -101,7 +101,7 @@
 
         <h2>Transfer Funds</h2>
 
-        <form action="/transfers" method="post" class="transfer-form">
+        <form th:action="@{/transfers}" th:method="post" th:object="${transferRequest}" class="transfer-form">
 
           <label for="walletId">Select Wallet</label>
           <select id="walletId" name="fromWalletId" required="">
