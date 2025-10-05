@@ -10,6 +10,8 @@ import app.wallet.enums.WalletStatus;
 import app.wallet.model.Wallet;
 import app.wallet.repository.WalletRepository;
 import app.wallet.service.WalletService;
+import app.web.dto.TransferRequest;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,10 @@ public class WalletServiceImpl implements WalletService {
     private final WalletRepository walletRepository;
 
     private final TransactionService transactionService;
+
+    private static final String TRANSFER_DESCRIPTION_FORMAT = "Transfer %s <> %s (%.2f)";
+    private static final String TOP_UP_DESCRIPTION_FORMAT = "Top-up %.2f";
+
 
     @Autowired
     public WalletServiceImpl(WalletRepository walletRepository, TransactionService transactionService) {
@@ -49,11 +55,9 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     @Transactional
-    public Transaction topUp(UUID walletId, BigDecimal amount) {
+    public Transaction deposit(UUID walletId, BigDecimal amount, String description) {
 
         Wallet wallet = getWalletById(walletId);
-
-        String description = "Top up %.2f".formatted(amount.doubleValue());
 
         if (wallet.getStatus() == WalletStatus.INACTIVE) {
 
@@ -98,7 +102,7 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     @Transactional
-    public Transaction charge(User user, UUID walletId, BigDecimal amount, String chargeDescription) {
+    public Transaction withdrawal(User user, UUID walletId, BigDecimal amount, String description) {
 
         Wallet wallet = getWalletById(walletId);
 
@@ -131,7 +135,7 @@ public class WalletServiceImpl implements WalletService {
                 wallet.getCurrency(),
                 TransactionType.WITHDRAWAL,
                 status,
-                chargeDescription,
+                description,
                 failureReason
         );
 
@@ -149,6 +153,45 @@ public class WalletServiceImpl implements WalletService {
                 .stream()
                 .map(Wallet::getBalance)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    @Override
+    @Transactional
+    public Transaction transfer(@Valid TransferRequest transferRequest) {
+
+        Wallet senderWallet = this.getWalletById(transferRequest.getWalletId());
+
+        Wallet receiverWallet = this.walletRepository.findWalletByOwnerUsername(transferRequest.getRecipientUsername())
+                .stream()
+                .filter(this::isActiveWallet)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("[%s] doesn't have active wallets"
+                        .formatted(transferRequest.getRecipientUsername())));
+
+
+        String transferDescription = TRANSFER_DESCRIPTION_FORMAT
+                .formatted( senderWallet.getOwner().getUsername(),
+                            receiverWallet.getOwner().getUsername(),
+                            transferRequest.getAmount()
+                );
+
+
+
+
+
+        Transaction withdrawalTransaction = withdrawal(senderWallet.getOwner(), senderWallet.getId(),
+                transferRequest.getAmount(), transferDescription);
+
+        Transaction depositTransaction = deposit(receiverWallet.getId(), transferRequest.getAmount(),
+                transferDescription);
+
+
+
+        return withdrawalTransaction;
+    }
+
+    private boolean isActiveWallet(Wallet wallet) {
+        return wallet.getStatus() == WalletStatus.ACTIVE;
     }
 
 

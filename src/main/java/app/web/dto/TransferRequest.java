@@ -10,10 +10,10 @@ import java.util.UUID;
 public class TransferRequest {
     @NotNull
     private UUID walletId;
-    @NotBlank
+    @NotBlank(message = "Recipient username cannot be blank")
     private String recipientUsername;
-    @Positive
-    @NotNull
+    @Positive(message = "Amount must be positive")
+    @NotNull(message = "Please enter amount")
     private BigDecimal amount;
 
     public TransferRequest() {}
