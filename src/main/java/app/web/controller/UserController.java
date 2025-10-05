@@ -2,6 +2,7 @@ package app.web.controller;
 
 import app.user.model.User;
 import app.user.service.UserService;
+import app.web.dto.ProfileEditRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +44,7 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("profile-menu");
         modelAndView.addObject("user", user);
-
+        modelAndView.addObject("profileEditRequest", new ProfileEditRequest());
 
         return modelAndView;
     }
