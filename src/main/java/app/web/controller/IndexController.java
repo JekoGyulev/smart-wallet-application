@@ -5,18 +5,18 @@ import app.user.property.UserProperties;
 import app.user.service.UserService;
 import app.web.dto.LoginRequest;
 import app.web.dto.RegisterRequest;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.UUID;
+
 
 @Controller
 @RequestMapping
@@ -46,15 +46,20 @@ public class IndexController {
         return modelAndView;
     }
 
+    // Autowire HttpSession = automatically create user session, generate session id
+    // and return Set-Cookie header with the session id
     @PostMapping("/login")
     public ModelAndView login(@Valid @ModelAttribute LoginRequest loginRequest,
-                              BindingResult bindingResul) {
+                              BindingResult bindingResul,
+                              HttpSession session) {
 
         if (bindingResul.hasErrors()) {
             return new ModelAndView("login");
         }
 
-        this.userService.loginUser(loginRequest);
+        User user = this.userService.loginUser(loginRequest);
+        session.setAttribute("userId", user.getId());
+        session.setMaxInactiveInterval(60 * 60);
 
         return new ModelAndView("redirect:/home");
     }
@@ -84,14 +89,23 @@ public class IndexController {
     }
 
     @GetMapping("/home")
-    public ModelAndView getHomePage() {
-        // This will be changed in the future (no hardcoding)
-        User user = this.userService.getByUsername(this.userProperties.getDefaultUser().getUsername());
+    public ModelAndView getHomePage(HttpSession session) {
+
+        UUID userId = (UUID) session.getAttribute("userId");
+
+        User user = this.userService.getById(userId);
 
         ModelAndView modelAndView = new ModelAndView("home");
         modelAndView.addObject("user", user);
 
         return modelAndView;
+    }
+
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
     }
 
 
