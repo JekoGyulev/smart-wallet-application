@@ -23,6 +23,9 @@ public interface UserService {
 
     User getById(UUID id);
 
+    void switchStatus(UUID id);
+    void switchRole(UUID id);
+
     long countActiveUsers();
     long countInactiveUsers();
     long countAdminUsers();

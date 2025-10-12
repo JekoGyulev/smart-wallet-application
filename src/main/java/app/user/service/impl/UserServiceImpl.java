@@ -120,6 +120,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void switchStatus(UUID id) {
+        User user = getById(id);
+
+        user.setActive(!user.isActive());
+
+        user.setUpdatedOn(LocalDateTime.now());
+
+        userRepository.save(user);
+    }
+
+    @Override
+    public void switchRole(UUID id) {
+        User user = getById(id);
+
+        if (user.getRole() == UserRole.USER) {
+            user.setRole(UserRole.ADMIN);
+        } else {
+            user.setRole(UserRole.USER);
+        }
+
+        user.setUpdatedOn(LocalDateTime.now());
+
+        this.userRepository.save(user);
+    }
+
+    @Override
     public long countActiveUsers() {
         return this.getAllUsers()
                 .stream()
