@@ -4,6 +4,7 @@ import app.subscription.service.SubscriptionService;
 import app.user.model.User;
 import app.user.property.UserProperties;
 import app.user.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,9 +36,10 @@ public class SubscriptionController {
     }
 
     @GetMapping("/history")
-    public ModelAndView getSubscriptionHistoryPage() {
-        // This will be changed in the future (no hardcoding)
-        User user = this.userService.getByUsername(this.userProperties.getDefaultUser().getUsername());
+    public ModelAndView getSubscriptionHistoryPage(HttpSession session) {
+
+        UUID userId = (UUID) session.getAttribute("userId");
+        User user = this.userService.getById(userId);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("subscription-history");

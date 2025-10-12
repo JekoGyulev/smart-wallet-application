@@ -19,6 +19,8 @@ public class WebConfiguration implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
 
         // /** - всичко след
+        // .addPathPatterns - къде да бъде приложен този interceptor
+        // .excludePathPatterns - къде да не бъде приложен този interceptor
         registry.addInterceptor(sessionCheckInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/css/**","/images/**");
