@@ -3,6 +3,7 @@ package app.web.controller;
 import app.transaction.model.Transaction;
 import app.transaction.service.TransactionService;
 import app.user.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,11 +28,12 @@ public class TransactionController {
     }
 
     @GetMapping
-    public ModelAndView getTransactionsPage() {
+    public ModelAndView getTransactionsPage(HttpSession session) {
 
-        // This will be changed in the future (no hardcoding)
+        UUID userId = (UUID) session.getAttribute("userId");
+
         List<Transaction> transactions =
-                this.transactionService.getAllTransactionsByUserId(UUID.fromString("3a04b935-1067-4941-9783-d424b678190b"));
+                this.transactionService.getAllTransactionsByUserId(userId);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("transactions");
