@@ -28,6 +28,8 @@
 
       <h3>Login Here</h3>
 
+      <p th:if="${loginAttemptMessage}" th:text="${loginAttemptMessage} + '!'" class="alert-warning"></p>
+
       <label for="username">Username</label>
       <input type="text" placeholder="Username" id="username" th:field="*{username}">
       <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="alert-warning"></p>

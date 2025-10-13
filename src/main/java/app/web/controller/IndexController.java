@@ -5,8 +5,6 @@ import app.user.property.UserProperties;
 import app.user.service.UserService;
 import app.web.dto.LoginRequest;
 import app.web.dto.RegisterRequest;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +35,12 @@ public class IndexController {
     }
 
     @GetMapping("/login")
-    public ModelAndView getLoginPage() {
+    public ModelAndView getLoginPage(@RequestParam(name="loginAttemptMessage", required = false) String loginAttemptMessage) {
         ModelAndView modelAndView = new ModelAndView();
 
         modelAndView.setViewName("login");
         modelAndView.addObject("loginRequest", new LoginRequest());
+        modelAndView.addObject("loginAttemptMessage", loginAttemptMessage);
 
         return modelAndView;
     }
