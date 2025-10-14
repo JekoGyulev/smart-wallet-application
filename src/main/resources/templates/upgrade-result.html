@@ -139,15 +139,15 @@
         <div class="payment-details">
           <div class="details">
             <span class="item">Subscription:</span>
-            <span class="value">Default</span>
+            <span class="value" th:text="${subscription.type.name()}"></span>
           </div>
           <div class="details">
             <span class="item">Price:</span>
-            <span class="value">0.00 EUR</span>
+            <span class="value" th:text="${subscription.price} + ' EUR'"></span>
           </div>
           <div class="details">
             <span class="item">Start Date:</span>
-            <span class="value">December 30, 2024</span>
+            <span class="value" th:text="${#temporals.format(subscription.createdOn, 'dd MMM yyyy')}"></span>
           </div>
         </div>
       </div>
@@ -179,11 +179,11 @@
       <div class="details-section">
         <div class="details-section-container">
           <strong>Transaction id: </strong>
-          <p>691b4214-7db9-4430-847f-98e127226e73</p>
+          <p th:text="${transactionId}"></p>
         </div>
       </div>
 
-      <a href="/home" class="profile-actions-button">
+      <a th:href="@{/home}" class="profile-actions-button">
         <p>Go back</p>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M4 7H14C17.3137 7 20 9.68629 20 13C20 16.3137 17.3137 19 14 19H4M4 7L8 3M4 7L8 11"
