@@ -113,7 +113,7 @@
         <tbody>
 
         <tr th:each="transaction : ${transactions}">
-          <td th:text="${transaction.id}"></td>
+          <td><a th:text="${transaction.id}" th:href="@{'/transactions/' + ${transaction.id}}"></a></td>
           <td>
             <p th:if="${transaction.status.name() == 'SUCCEEDED'}" class="status active">SUCCEEDED</p>
             <p th:if="${transaction.status.name() == 'FAILED'}" class="status terminated">FAILED</p>
