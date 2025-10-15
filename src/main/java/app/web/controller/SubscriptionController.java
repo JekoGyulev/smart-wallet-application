@@ -73,8 +73,8 @@ public class SubscriptionController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView showUpgradeSubscription(@PathVariable UUID id, @RequestParam(name="transactionId")
-                                                UUID transactionId) {
+    public ModelAndView showUpgradeSubscription(@PathVariable UUID id,
+                                                @RequestParam(name="transactionId") UUID transactionId) {
 
         Subscription subscription = this.subscriptionService.getById(id);
 

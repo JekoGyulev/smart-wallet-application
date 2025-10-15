@@ -115,7 +115,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
         String chargeDescription = "Upgrade request for %s %s"
                 .formatted(upgradeRequest.getSubscriptionPeriod().getDisplayName(),
-                        currentlyActiveSubscription.getType());
+                        subscriptionType);
 
         Transaction transaction = this.walletService
                 .withdrawal(user, upgradeRequest.getWalletId(), subscriptionPrice, chargeDescription);
