@@ -1,6 +1,9 @@
 package app.wallet.service.impl;
 
+import app.email.EmailService;
+import app.event.SuccessfulChargeEvent;
 import app.exception.DomainException;
+import app.gift.GiftService;
 import app.transaction.enums.TransactionStatus;
 import app.transaction.enums.TransactionType;
 import app.transaction.model.Transaction;
@@ -14,6 +17,7 @@ import app.web.dto.TransferRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,18 +31,20 @@ import java.util.UUID;
 public class WalletServiceImpl implements WalletService {
 
     private static final String SMART_WALLET_LTD = "SMART WALLET LTD";
-    private final WalletRepository walletRepository;
-
-    private final TransactionService transactionService;
-
     private static final String TRANSFER_DESCRIPTION_FORMAT = "Transfer %s <> %s (%.2f)";
     private static final String TOP_UP_DESCRIPTION_FORMAT = "Top-up %.2f";
 
+    private final WalletRepository walletRepository;
+
+    private final TransactionService transactionService;
+    private final ApplicationEventPublisher eventPublisher;
+
 
     @Autowired
-    public WalletServiceImpl(WalletRepository walletRepository, TransactionService transactionService) {
+    public WalletServiceImpl(WalletRepository walletRepository, TransactionService transactionService, ApplicationEventPublisher eventPublisher) {
         this.walletRepository = walletRepository;
         this.transactionService = transactionService;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -123,6 +129,18 @@ public class WalletServiceImpl implements WalletService {
             wallet.setUpdatedOn(LocalDateTime.now());
             this.walletRepository.save(wallet);
             status = TransactionStatus.SUCCEEDED;
+
+            // Event
+            SuccessfulChargeEvent event = SuccessfulChargeEvent.builder()
+                            .userId(user.getId())
+                                    .walletId(wallet.getId())
+                                            .amount(amount)
+                                                    .createdOn(LocalDateTime.now())
+                                                            .build();
+
+            this.eventPublisher.publishEvent(event);
+
+
         }
 
 
