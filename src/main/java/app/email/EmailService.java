@@ -1,6 +1,7 @@
 package app.email;
 
 import app.event.SuccessfulChargeEvent;
+import app.user.model.User;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
@@ -17,4 +18,8 @@ public class EmailService {
                 .formatted(successfulChargeEvent.getEmail()));
     }
 
+
+    public void sendReminderEmail(User admin) {
+        System.out.printf("Email sent to [%s] with username [%s]%n", admin.getRole(), admin.getUsername());
+    }
 }
