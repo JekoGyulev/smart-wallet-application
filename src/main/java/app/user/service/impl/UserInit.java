@@ -42,8 +42,5 @@ public class UserInit implements CommandLineRunner {
 
             this.userService.registerUser(request);
         }
-
-
-
     }
 }
