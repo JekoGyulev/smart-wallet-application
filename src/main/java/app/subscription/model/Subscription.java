@@ -33,12 +33,12 @@ public class Subscription {
     private boolean renewalAllowed;
     @Column(name = "created_on", nullable = false)
     private LocalDateTime createdOn;
-    @Column(name = "expiry_on", nullable = false)
-    private LocalDateTime expiryOn;
+    @Column(name = "completed_on", nullable = false)
+    private LocalDateTime completedOn;
 
     public Subscription() {}
 
-    public Subscription(User owner, SubscriptionStatus status, SubscriptionPeriod period, SubscriptionType type, BigDecimal price, boolean renewalAllowed, LocalDateTime createdOn, LocalDateTime expiryOn) {
+    public Subscription(User owner, SubscriptionStatus status, SubscriptionPeriod period, SubscriptionType type, BigDecimal price, boolean renewalAllowed, LocalDateTime createdOn, LocalDateTime completedOn) {
         this.owner = owner;
         this.status = status;
         this.period = period;
@@ -46,7 +46,7 @@ public class Subscription {
         this.price = price;
         this.renewalAllowed = renewalAllowed;
         this.createdOn = createdOn;
-        this.expiryOn = expiryOn;
+        this.completedOn = completedOn;
     }
 
 
@@ -115,11 +115,11 @@ public class Subscription {
         this.createdOn = createdOn;
     }
 
-    public LocalDateTime getExpiryOn() {
-        return expiryOn;
+    public LocalDateTime getCompletedOn() {
+        return completedOn;
     }
 
-    public void setExpiryOn(LocalDateTime expiryOn) {
-        this.expiryOn = expiryOn;
+    public void setCompletedOn(LocalDateTime completedOn) {
+        this.completedOn = completedOn;
     }
 }

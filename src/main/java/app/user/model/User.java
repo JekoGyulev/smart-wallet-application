@@ -45,18 +45,13 @@ public class User {
     // Subscriptions
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     @OrderBy("createdOn DESC")
-    private List<Subscription> subscriptions;
+    private List<Subscription> subscriptions = new ArrayList<>();
     // Wallets
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     @OrderBy("createdOn ASC")
-    private List<Wallet> wallets;
+    private List<Wallet> wallets = new ArrayList<>();
 
-
-    public User() {
-        this.subscriptions = new ArrayList<>();
-        this.wallets = new ArrayList<>();
-    }
-
+    public User() {}
 
 
     public User(String username, String firstName, String lastName, String profilePicture, String email, String password, UserRole role, Country country, boolean isActive, LocalDateTime createdOn, LocalDateTime updatedOn, List<Subscription> subscriptions, List<Wallet> wallets) {

@@ -215,7 +215,7 @@
         </div>
         <div class="details-section-container">
           <strong>Subscribe until: </strong>
-          <p th:text="${#temporals.format(user.subscriptions[0].expiryOn, 'dd MMM yyyy HH:mm')}"></p>
+          <p th:text="${#temporals.format(user.subscriptions[0].completedOn, 'dd MMM yyyy HH:mm')}"></p>
         </div>
       </div>
     </div>

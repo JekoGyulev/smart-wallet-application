@@ -26,21 +26,21 @@ public class UserInit implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        List<User> users = userService.getAllUsers();
-
-        boolean userDefaultDoesNotExist = users
-                .stream()
-                .noneMatch(user -> user.getUsername()
-                        .equals(userProperties.getDefaultUser().getUsername()));
-
-        if (userDefaultDoesNotExist) {
-
-            RegisterRequest request =
-                    new RegisterRequest(userProperties.getDefaultUser().getUsername(),
-                            userProperties.getDefaultUser().getPassword(),
-                            userProperties.getDefaultUser().getCountry());
-
-            this.userService.registerUser(request);
-        }
+//        List<User> users = userService.getAllUsers();
+//
+//        boolean userDefaultDoesNotExist = users
+//                .stream()
+//                .noneMatch(user -> user.getUsername()
+//                        .equals(userProperties.getDefaultUser().getUsername()));
+//
+//        if (userDefaultDoesNotExist) {
+//
+//            RegisterRequest request =
+//                    new RegisterRequest(userProperties.getDefaultUser().getUsername(),
+//                            userProperties.getDefaultUser().getPassword(),
+//                            userProperties.getDefaultUser().getCountry());
+//
+//            this.userService.registerUser(request);
+//        }
     }
 }

@@ -150,7 +150,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         );
 
         currentlyActiveSubscription.setStatus(SubscriptionStatus.COMPLETED);
-        currentlyActiveSubscription.setExpiryOn(now);
+        currentlyActiveSubscription.setCompletedOn(now);
 
         subscriptionRepository.save(currentlyActiveSubscription);
         subscriptionRepository.save(newActiveSubscription);
