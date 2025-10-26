@@ -45,25 +45,6 @@ public class IndexController {
         return modelAndView;
     }
 
-    // Autowire HttpSession = automatically create user session, generate session id
-    // and return Set-Cookie header with the session id
-    @PostMapping("/login")
-    public ModelAndView login(@Valid @ModelAttribute LoginRequest loginRequest,
-                              BindingResult bindingResul,
-                              HttpSession session) {
-
-        if (bindingResul.hasErrors()) {
-            return new ModelAndView("login");
-        }
-
-        User user = this.userService.loginUser(loginRequest);
-        session.setAttribute("userId", user.getId());
-        session.setMaxInactiveInterval(60 * 60);
-
-        return new ModelAndView("redirect:/home");
-    }
-
-
     @GetMapping("/register")
     public ModelAndView getRegisterPage() {
 
@@ -99,16 +80,6 @@ public class IndexController {
 
         return modelAndView;
     }
-
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/";
-    }
-
-
-
 
 
 }

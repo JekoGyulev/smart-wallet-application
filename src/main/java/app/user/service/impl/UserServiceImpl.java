@@ -88,23 +88,23 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Override
-    public User loginUser(LoginRequest request) {
-
-        Optional<User> optionalUser = this.userRepository.findByUsername(request.getUsername());
-
-        if (optionalUser.isEmpty()) {
-            throw new DomainException("Username or password is incorrect");
-        }
-
-        User user = optionalUser.get();
-
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new DomainException("Username or password is incorrect");
-        }
-
-        return user;
-    }
+//    @Override
+//    public User loginUser(LoginRequest request) {
+//
+//        Optional<User> optionalUser = this.userRepository.findByUsername(request.getUsername());
+//
+//        if (optionalUser.isEmpty()) {
+//            throw new DomainException("Username or password is incorrect");
+//        }
+//
+//        User user = optionalUser.get();
+//
+//        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+//            throw new DomainException("Username or password is incorrect");
+//        }
+//
+//        return user;
+//    }
 
     @Override
     public User getByUsername(String username) {
