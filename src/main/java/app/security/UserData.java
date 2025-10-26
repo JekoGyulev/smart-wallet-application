@@ -10,6 +10,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+
+// That is my Principal object
+// Single Responsibility
+// Principal = object that stores security data for authenticated user
+
 @Data
 @AllArgsConstructor
 public class UserData implements UserDetails {

@@ -1,5 +1,6 @@
 package app.web.controller;
 
+import app.security.UserData;
 import app.user.model.User;
 import app.user.property.UserProperties;
 import app.user.service.UserService;
@@ -8,6 +9,7 @@ import app.web.dto.RegisterRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +23,10 @@ import java.util.UUID;
 public class IndexController {
 
     private final UserService userService;
-    private final UserProperties userProperties;
 
     @Autowired
-    public IndexController(UserService userService, UserProperties userProperties) {
+    public IndexController(UserService userService) {
         this.userService = userService;
-        this.userProperties = userProperties;
     }
 
     @GetMapping("/")
@@ -69,11 +69,8 @@ public class IndexController {
     }
 
     @GetMapping("/home")
-    public ModelAndView getHomePage(HttpSession session) {
-
-        UUID userId = (UUID) session.getAttribute("userId");
-
-        User user = this.userService.getById(userId);
+    public ModelAndView getHomePage(@AuthenticationPrincipal UserData userData) {
+        User user = this.userService.getById(userData.getId());
 
         ModelAndView modelAndView = new ModelAndView("home");
         modelAndView.addObject("user", user);
