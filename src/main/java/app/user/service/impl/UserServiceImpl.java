@@ -1,6 +1,7 @@
 package app.user.service.impl;
 
 import app.exception.DomainException;
+import app.security.UserData;
 import app.subscription.model.Subscription;
 import app.subscription.service.SubscriptionService;
 import app.user.enums.UserRole;
@@ -19,6 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +35,7 @@ import java.util.UUID;
 
 @Service
 @Slf4j
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
     private final WalletService walletService;
@@ -208,5 +212,18 @@ public class UserServiceImpl implements UserService {
                             passwordEncoder.encode(request.getPassword()),
                             request.getCountry()
         );
+    }
+
+    // Всеки път при логин операция, Spring Security ще извиква този метод
+    // Това потребителско име може да е телефон, имейл и т.н , но трябва да се конфигурира в SecurityFilterChain
+    // Цел на метода: да кажа на Spring Security кой е потребителя зад това потребителско име
+    // Return type: методът очаква да върне UserDetails обект, който има данни на този потребител
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+
+        return new UserData(user.getId(), user.getUsername(), user.getPassword(), user.getRole(), user.isActive());
     }
 }
