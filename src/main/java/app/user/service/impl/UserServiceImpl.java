@@ -124,6 +124,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "users", allEntries = true)
     public void switchStatus(UUID id) {
         User user = getById(id);
 
@@ -135,6 +136,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "users", allEntries = true)
     public void switchRole(UUID id) {
         User user = getById(id);
 
