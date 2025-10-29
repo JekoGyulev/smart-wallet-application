@@ -15,8 +15,6 @@ public interface UserService {
 
     User registerUser(RegisterRequest request);
 
-    User loginUser(LoginRequest request);
-
     User getByUsername(String username);
 
     List<User> getAllUsers();

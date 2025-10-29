@@ -1,5 +1,6 @@
 package app.web.controller;
 
+import app.security.UserData;
 import app.user.model.User;
 import app.user.property.UserProperties;
 import app.user.service.UserService;
@@ -8,6 +9,7 @@ import app.web.dto.RegisterRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +23,10 @@ import java.util.UUID;
 public class IndexController {
 
     private final UserService userService;
-    private final UserProperties userProperties;
 
     @Autowired
-    public IndexController(UserService userService, UserProperties userProperties) {
+    public IndexController(UserService userService) {
         this.userService = userService;
-        this.userProperties = userProperties;
     }
 
     @GetMapping("/")
@@ -35,34 +35,21 @@ public class IndexController {
     }
 
     @GetMapping("/login")
-    public ModelAndView getLoginPage(@RequestParam(name="loginAttemptMessage", required = false) String loginAttemptMessage) {
+    public ModelAndView getLoginPage(@RequestParam(name="loginAttemptMessage", required = false) String loginAttemptMessage,
+                                     @RequestParam(name="error", required = false) String errorMessage) {
         ModelAndView modelAndView = new ModelAndView();
 
         modelAndView.setViewName("login");
         modelAndView.addObject("loginRequest", new LoginRequest());
         modelAndView.addObject("loginAttemptMessage", loginAttemptMessage);
 
-        return modelAndView;
-    }
-
-    // Autowire HttpSession = automatically create user session, generate session id
-    // and return Set-Cookie header with the session id
-    @PostMapping("/login")
-    public ModelAndView login(@Valid @ModelAttribute LoginRequest loginRequest,
-                              BindingResult bindingResul,
-                              HttpSession session) {
-
-        if (bindingResul.hasErrors()) {
-            return new ModelAndView("login");
+        if (errorMessage != null) {
+            modelAndView.addObject("errorMessage", "Invalid username or password");
         }
 
-        User user = this.userService.loginUser(loginRequest);
-        session.setAttribute("userId", user.getId());
-        session.setMaxInactiveInterval(60 * 60);
 
-        return new ModelAndView("redirect:/home");
+        return modelAndView;
     }
-
 
     @GetMapping("/register")
     public ModelAndView getRegisterPage() {
@@ -88,27 +75,14 @@ public class IndexController {
     }
 
     @GetMapping("/home")
-    public ModelAndView getHomePage(HttpSession session) {
-
-        UUID userId = (UUID) session.getAttribute("userId");
-
-        User user = this.userService.getById(userId);
+    public ModelAndView getHomePage(@AuthenticationPrincipal UserData userData) {
+        User user = this.userService.getById(userData.getId());
 
         ModelAndView modelAndView = new ModelAndView("home");
         modelAndView.addObject("user", user);
 
         return modelAndView;
     }
-
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/";
-    }
-
-
-
 
 
 }

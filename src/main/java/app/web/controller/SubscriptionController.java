@@ -1,5 +1,6 @@
 package app.web.controller;
 
+import app.security.UserData;
 import app.subscription.enums.SubscriptionType;
 import app.subscription.model.Subscription;
 import app.subscription.service.SubscriptionService;
@@ -11,6 +12,7 @@ import app.web.dto.UpgradeRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -35,10 +37,9 @@ public class SubscriptionController {
 
 
     @GetMapping
-    public ModelAndView getSubscriptionsPage(HttpSession session) {
+    public ModelAndView getSubscriptionsPage(@AuthenticationPrincipal UserData userData) {
 
-        UUID userId = (UUID) session.getAttribute("userId");
-        User user = this.userService.getById(userId);
+        User user = this.userService.getById(userData.getId());
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("upgrade");
@@ -51,10 +52,9 @@ public class SubscriptionController {
     public ModelAndView upgrade(@Valid UpgradeRequest upgradeRequest,
                                  @RequestParam(name="subscriptionType") SubscriptionType subscriptionType,
                                  BindingResult bindingResult,
-                                 HttpSession session) {
+                                 @AuthenticationPrincipal UserData userData) {
 
-        User user = this.userService.getById((UUID) session.getAttribute("userId"));
-
+        User user = this.userService.getById(userData.getId());
 
         if (bindingResult.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView();
@@ -87,10 +87,9 @@ public class SubscriptionController {
     }
 
     @GetMapping("/history")
-    public ModelAndView getSubscriptionHistoryPage(HttpSession session) {
+    public ModelAndView getSubscriptionHistoryPage(@AuthenticationPrincipal UserData userData) {
 
-        UUID userId = (UUID) session.getAttribute("userId");
-        User user = this.userService.getById(userId);
+        User user = this.userService.getById(userData.getId());
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("subscription-history");
