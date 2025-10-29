@@ -33,6 +33,9 @@ public class WalletServiceImpl implements WalletService {
     private static final String SMART_WALLET_LTD = "SMART WALLET LTD";
     private static final String TRANSFER_DESCRIPTION_FORMAT = "Transfer %s <> %s (%.2f)";
     private static final String TOP_UP_DESCRIPTION_FORMAT = "Top-up %.2f";
+    private static final String FIRST_WALLET_NICKNAME = "Vault Zero";
+    private static final String SECOND_WALLET_NICKNAME = "Nova Flow";
+    private static final String THIRD_WALLET_NICKNAME = "Pulse Pay";
 
     private final WalletRepository walletRepository;
 
@@ -225,12 +228,14 @@ public class WalletServiceImpl implements WalletService {
          */
 
         return new Wallet(
+                FIRST_WALLET_NICKNAME,
                 user,
                 WalletStatus.ACTIVE,
                 BigDecimal.valueOf(20.00),
                 Currency.getInstance("EUR"),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                true
         );
     }
 

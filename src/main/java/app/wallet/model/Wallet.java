@@ -15,6 +15,8 @@ public class Wallet {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    @Column(nullable = false)
+    private String nickname;
     @ManyToOne
     private User owner;
     @Enumerated(value = EnumType.STRING)
@@ -28,16 +30,20 @@ public class Wallet {
     private LocalDateTime createdOn;
     @Column(name = "updated_on", nullable = false)
     private LocalDateTime updatedOn;
+    @Column(name = "is_primary")
+    private boolean isPrimary;
 
     public Wallet() {}
 
-    public Wallet(User owner, WalletStatus status, BigDecimal balance, Currency currency, LocalDateTime createdOn, LocalDateTime updatedOn) {
+    public Wallet(String nickname, User owner, WalletStatus status, BigDecimal balance, Currency currency, LocalDateTime createdOn, LocalDateTime updatedOn, boolean isPrimary) {
+        this.nickname = nickname;
         this.owner = owner;
         this.status = status;
         this.balance = balance;
         this.currency = currency;
         this.createdOn = createdOn;
         this.updatedOn = updatedOn;
+        this.isPrimary = isPrimary;
     }
 
     public UUID getId() {
@@ -94,5 +100,21 @@ public class Wallet {
 
     public void setUpdatedOn(LocalDateTime updatedOn) {
         this.updatedOn = updatedOn;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public boolean isPrimary() {
+        return isPrimary;
+    }
+
+    public void setPrimary(boolean primary) {
+        isPrimary = primary;
     }
 }

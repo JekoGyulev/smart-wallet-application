@@ -142,14 +142,14 @@
 
     <div class="single-section-box home-standard-wallet">
       <div class="default-label-box">
-        <p>Standard Wallet</p>
-        <p th:text="${user.wallets[0].status}"
-           th:classappend="${user.wallets[0].status.name() == 'ACTIVE' ? 'active-wallet-status' : 'inactive-wallet-status'}"
+        <p th:text="${primaryWallet.nickname}"></p>
+        <p th:text="${primaryWallet.status}"
+           th:classappend="${primaryWallet.status.name() == 'ACTIVE' ? 'active-wallet-status' : 'inactive-wallet-status'}"
         ></p>
 
       </div>
       <div class="wallet-balance">
-        <p th:text="${user.wallets[0].balance} + ' EUR'" class="balance"></p>
+        <p th:text="${primaryWallet.balance} + ' EUR'" class="balance"></p>
         <p class="available-balance-text">Available Balance</p>
       </div>
 
@@ -164,11 +164,11 @@
       <div class="details-section">
         <div class="details-section-container">
           <strong>Wallet id: </strong>
-          <p th:text="${user.wallets[0].id}"></p>
+          <p th:text="${primaryWallet.id}"></p>
         </div>
         <div class="details-section-container">
           <strong>Last transaction on: </strong>
-          <p th:text="${#temporals.format(user.wallets[0].createdOn, 'dd MMM yyyy HH:mm')}"></p>
+          <p th:text="${#temporals.format(primaryWallet.createdOn, 'dd MMM yyyy HH:mm')}"></p>
         </div>
       </div>
     </div>

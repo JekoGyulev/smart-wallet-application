@@ -4,6 +4,7 @@ import app.security.UserData;
 import app.user.model.User;
 import app.user.property.UserProperties;
 import app.user.service.UserService;
+import app.wallet.model.Wallet;
 import app.web.dto.LoginRequest;
 import app.web.dto.RegisterRequest;
 import jakarta.servlet.http.HttpSession;
@@ -80,6 +81,7 @@ public class IndexController {
 
         ModelAndView modelAndView = new ModelAndView("home");
         modelAndView.addObject("user", user);
+        modelAndView.addObject("primaryWallet", user.getWallets().stream().filter(Wallet::isPrimary).findFirst().get());
 
         return modelAndView;
     }
