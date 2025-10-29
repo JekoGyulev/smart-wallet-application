@@ -35,12 +35,18 @@ public class IndexController {
     }
 
     @GetMapping("/login")
-    public ModelAndView getLoginPage(@RequestParam(name="loginAttemptMessage", required = false) String loginAttemptMessage) {
+    public ModelAndView getLoginPage(@RequestParam(name="loginAttemptMessage", required = false) String loginAttemptMessage,
+                                     @RequestParam(name="error", required = false) String errorMessage) {
         ModelAndView modelAndView = new ModelAndView();
 
         modelAndView.setViewName("login");
         modelAndView.addObject("loginRequest", new LoginRequest());
         modelAndView.addObject("loginAttemptMessage", loginAttemptMessage);
+
+        if (errorMessage != null) {
+            modelAndView.addObject("errorMessage", "Invalid username or password");
+        }
+
 
         return modelAndView;
     }
