@@ -153,7 +153,7 @@
         <p>0.00</p>
         <p>yearly price</p>
       </div>
-      <form class="form" action="/subscriptions?subscriptionType=DEFAULT" th:method="post" th:object="${upgradeRequest}">
+      <form class="form" th:action="@{'/subscriptions?subscriptionType=DEFAULT'}" th:method="POST" th:object="${upgradeRequest}">
         <label>Choose period</label>
         <select name="subscriptionPeriod" th:field="*{subscriptionPeriod}">
           <option th:each="period : ${T(app.subscription.enums.SubscriptionPeriod).values()}"
@@ -215,7 +215,7 @@
         <p>199.99</p>
         <p>yearly price</p>
       </div>
-      <form class="form" action="/subscriptions?subscriptionType=PREMIUM" th:method="post" th:object="${upgradeRequest}">
+      <form class="form" th:action="@{'/subscriptions?subscriptionType=PREMIUM'}" th:method="POST" th:object="${upgradeRequest}">
         <label>Choose period</label>
         <select name="subscriptionPeriod" th:field="*{subscriptionPeriod}">
           <option th:each="period : ${T(app.subscription.enums.SubscriptionPeriod).values()}"
@@ -277,7 +277,7 @@
         <p>499.99</p>
         <p>yearly price</p>
       </div>
-      <form class="form" action="/subscriptions?subscriptionType=ULTIMATE" th:method="post" th:object="${upgradeRequest}">
+      <form class="form" th:action="@{'/subscriptions?subscriptionType=ULTIMATE'}" th:method="POST" th:object="${upgradeRequest}">
         <label>Choose period</label>
         <select name="subscriptionPeriod" th:field="*{subscriptionPeriod}">
           <option th:each="period : ${T(app.subscription.enums.SubscriptionPeriod).values()}"

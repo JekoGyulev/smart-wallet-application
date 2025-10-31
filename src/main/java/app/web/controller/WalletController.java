@@ -4,6 +4,7 @@ import app.security.UserData;
 import app.transaction.model.Transaction;
 import app.user.model.User;
 import app.user.service.UserService;
+import app.utility.WalletUtils;
 import app.wallet.model.Wallet;
 import app.wallet.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ public class WalletController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("wallets");
         modelAndView.addObject("wallets", wallets);
+        modelAndView.addObject("isEligibleToUnlock", WalletUtils.isEligibleToUnlockNewWallet(user));
         return modelAndView;
     }
 
