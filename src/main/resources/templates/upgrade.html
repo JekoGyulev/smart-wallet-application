@@ -164,7 +164,7 @@
         <select name="walletId" th:field="*{walletId}">
           <option th:each="wallet : ${user.wallets}"
                   th:value="${wallet.id}"
-                  th:text="${'Standard Wallet' + ' - ' + wallet.balance + ' EUR'}"></option>
+                  th:text="${wallet.nickname} + ' - ' + ${wallet.balance} + ' EUR'"></option>
         </select>
         <!-- Buttons does not support th:field and th:value, so we can use name(pick the object field) value(the value to be bind to that field)-->
         <button th:unless="${user.subscriptions[0].type.name() == 'DEFAULT'}"
@@ -226,7 +226,7 @@
         <select name="walletId" th:field="*{walletId}">
           <option th:each="wallet : ${user.wallets}"
                   th:value="${wallet.id}"
-                  th:text="${'Standard Wallet' + ' - ' + wallet.balance + ' EUR'}"></option>
+                  th:text="${wallet.nickname} + ' - ' + ${wallet.balance} + ' EUR'"></option>
         </select>
         <button th:unless="${user.subscriptions[0].type.name() == 'PREMIUM'}"
                 class="subscription-action-button" type="submit" name="subscriptionType" id="PREMIUM" value="PREMIUM">
@@ -288,7 +288,7 @@
         <select name="walletId" th:field="*{walletId}">
           <option th:each="wallet : ${user.wallets}"
                   th:value="${wallet.id}"
-                  th:text="${'Standard Wallet' + ' - ' + wallet.balance + ' EUR'}"></option>
+                  th:text="${wallet.nickname} + ' - ' + ${wallet.balance} + ' EUR'"></option>
         </select>
 
         <button th:unless="${user.subscriptions[0].type.name() == 'ULTIMATE'}"

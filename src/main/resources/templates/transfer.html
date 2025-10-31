@@ -106,7 +106,7 @@
           <label for="walletId">Select Wallet</label>
           <select id="walletId" name="fromWalletId" th:field="*{walletId}">
             <option value="" disabled="">Select your wallet</option>
-            <option th:each=" wallet : ${user.wallets} " th:value="${wallet.id}" th:text="'Standard Wallet - ' + ${wallet.balance} + ' EUR'"></option>
+            <option th:each=" wallet : ${user.wallets} " th:value="${wallet.id}" th:text="${wallet.nickname} + ' - ' + ${wallet.balance} + ' EUR'"></option>
           </select>
           <p th:if="${#fields.hasErrors('walletId')}" th:errors="*{walletId}" class="alert-warning"></p>
 
