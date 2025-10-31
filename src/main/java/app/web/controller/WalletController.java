@@ -62,6 +62,13 @@ public class WalletController {
         return "redirect:/wallets";
     }
 
+    @PostMapping("/create")
+    public String unlockNewWallet(@AuthenticationPrincipal UserData userData) {
+        User user = this.userService.getById(userData.getId());
+        this.walletService.unlockNewWallet(user);
+        return "redirect:/wallets";
+    }
+
 
 
 

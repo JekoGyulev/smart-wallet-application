@@ -7,6 +7,7 @@ import app.transaction.enums.TransactionType;
 import app.transaction.model.Transaction;
 import app.transaction.service.TransactionService;
 import app.user.model.User;
+import app.utility.WalletUtils;
 import app.wallet.enums.WalletStatus;
 import app.wallet.model.Wallet;
 import app.wallet.repository.WalletRepository;
@@ -250,6 +251,30 @@ public class WalletServiceImpl implements WalletService {
         wallet.setPrimary(true);
         wallet.setUpdatedOn(LocalDateTime.now());
         this.walletRepository.save(wallet);
+    }
+
+    @Override
+    public void unlockNewWallet(User user) {
+
+        boolean isEligibleToUnlock = WalletUtils.isEligibleToUnlockNewWallet(user);
+
+        if (!isEligibleToUnlock) {
+            throw new RuntimeException("This user reached the max number of allowed wallets");
+        }
+
+        Wallet newWallet = new Wallet(
+                user.getWallets().size() == 1 ? SECOND_WALLET_NICKNAME : THIRD_WALLET_NICKNAME,
+                user,
+                WalletStatus.ACTIVE,
+                BigDecimal.valueOf(0),
+                Currency.getInstance("EUR"),
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                false
+        );
+
+
+        this.walletRepository.save(newWallet);
     }
 
     private boolean isActiveWallet(Wallet wallet) {

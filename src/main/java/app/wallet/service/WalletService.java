@@ -28,4 +28,6 @@ public interface WalletService {
     void switchStatus(UUID id);
 
     void promoteWallet(UUID id);
+
+    void unlockNewWallet(User user);
 }

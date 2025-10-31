@@ -185,7 +185,7 @@
       </div>
     </div>
 
-    <form th:if="${isEligibleToUnlock}" class="wallet-block new-wallet" action="/wallets" method="post">
+    <form th:if="${isEligibleToUnlock}" class="wallet-block new-wallet" th:action="@{'/wallets/create'}" th:method="POST">
       <button type="submit"></button>
     </form>
 
