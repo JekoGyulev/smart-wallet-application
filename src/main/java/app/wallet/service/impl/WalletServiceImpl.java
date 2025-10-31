@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Currency;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -221,6 +222,33 @@ public class WalletServiceImpl implements WalletService {
             wallet.setStatus(WalletStatus.ACTIVE);
         }
 
+        this.walletRepository.save(wallet);
+    }
+
+    @Override
+    @Transactional
+    public void promoteWallet(UUID walletId) {
+        Wallet wallet = getWalletById(walletId);
+
+        if (wallet.isPrimary()) {
+            throw new RuntimeException("This wallet is already primary");
+        }
+
+        User owner = wallet.getOwner();
+
+        Optional<Wallet> optionalCurrentPrimaryWallet = this.walletRepository.findByOwner_IdAndPrimary(owner.getId(), true);
+
+        if (optionalCurrentPrimaryWallet.isPresent()) {
+
+            Wallet currentPrimaryWallet = optionalCurrentPrimaryWallet.get();
+            currentPrimaryWallet.setPrimary(false);
+            currentPrimaryWallet.setUpdatedOn(LocalDateTime.now());
+            this.walletRepository.save(currentPrimaryWallet);
+
+        }
+
+        wallet.setPrimary(true);
+        wallet.setUpdatedOn(LocalDateTime.now());
         this.walletRepository.save(wallet);
     }
 

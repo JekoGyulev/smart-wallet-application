@@ -54,6 +54,12 @@ public class WalletController {
         return "redirect:/wallets";
     }
 
+    @PatchMapping("/{id}/promote")
+    public String promoteWalletToPrimary(@PathVariable UUID id) {
+        this.walletService.promoteWallet(id);
+        return "redirect:/wallets";
+    }
+
 
 
 
