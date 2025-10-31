@@ -106,7 +106,6 @@ public class WalletServiceImpl implements WalletService {
         );
 
         return transaction;
-
     }
 
     @Override
@@ -205,6 +204,14 @@ public class WalletServiceImpl implements WalletService {
         }
 
         return withdrawalTransaction;
+    }
+
+    @Override
+    @Transactional
+    public Transaction topUpBalance(UUID id) {
+        BigDecimal amount = new BigDecimal("20.00");
+
+        return deposit(id, amount, TOP_UP_DESCRIPTION_FORMAT.formatted(amount));
     }
 
     private boolean isActiveWallet(Wallet wallet) {

@@ -99,19 +99,24 @@
   </div></div>
   <div class="home-section">
 
-    <div class="wallet-block">
+    <div class="wallet-block" th:each="wallet : ${wallets}">
       <div class="default-label-box">
-        <p>Standard Wallet</p>
-        <p class="active-wallet-status">ACTIVE</p>
+        <p th:text="${wallet.nickname}"></p>
+        <p th:if="${wallet.status.name() == 'ACTIVE'}" class="active-wallet-status">ACTIVE</p>
+        <p th:if="${wallet.status.name() == 'INACTIVE'}" class="inactive-wallet-status">INACTIVE</p>
+        <p th:if="${wallet.primary}" class="primary-label">PRIMARY</p>
+        <p th:unless="${wallet.primary}" class="non-primary-label">NON-PRIMARY</p>
       </div>
 
       <div class="wallet-balance">
-        <p class="balance">36.03 EUR</p>
+        <p th:text="${#numbers.formatDecimal(wallet.getBalance(), 2, 2)} + ' EUR'" class="balance"></p>
         <p class="available-balance-text">Available Balance</p>
       </div>
 
+
       <div class="wallet-actions">
-        <form action="/wallets/dccacda6-12d3-422c-8ad0-23992ef55a1b/balance?top-up-amount=20.00" method="post"><input type="hidden" name="_method" value="PUT">
+
+        <form th:action="@{'/wallets/' + ${wallet.id} + '/balance'}" th:method="PATCH">
           <button type="submit" class="profile-actions-button">
             <p>20.00</p>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
@@ -119,9 +124,19 @@
             </svg>
           </button>
         </form>
-        <form action="/wallets/dccacda6-12d3-422c-8ad0-23992ef55a1b" method="post"><input type="hidden" name="_method" value="PUT">
+
+        <form action="/wallets/dccacda6-12d3-422c-8ad0-23992ef55a1b" method="post">
           <button type="submit" class="profile-actions-button">
             <p>Switch</p>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-toggle-on" viewBox="0 0 16 16">
+              <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"></path>
+            </svg>
+          </button>
+
+        </form>
+        <form th:unless="${wallet.primary}" action="/wallets/dccacda6-12d3-422c-8ad0-23992ef55a1b" method="post">
+          <button type="submit" class="profile-actions-button">
+            <p>Promote</p>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-toggle-on" viewBox="0 0 16 16">
               <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"></path>
             </svg>
@@ -132,11 +147,11 @@
       <div class="details-section">
         <div class="details-section-container">
           <strong>Id: </strong>
-          <p>dccacda6-12d3-422c-8ad0-23992ef55a1b</p>
+          <p th:text="${wallet.id}"></p>
         </div>
         <div class="details-section-container">
           <strong>Created on: </strong>
-          <p>09 Dec 2024 21:39</p>
+          <p th:text="${#temporals.format(wallet.createdOn, 'dd MMM yyyy HH:mm')}"></p>
         </div>
       </div>
 

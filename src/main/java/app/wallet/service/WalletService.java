@@ -23,4 +23,5 @@ public interface WalletService {
     Transaction transfer(TransferRequest transferRequest);
 
 
+    Transaction topUpBalance(UUID id);
 }
