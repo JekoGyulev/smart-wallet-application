@@ -1,9 +1,7 @@
 package app.wallet.service.impl;
 
-import app.email.EmailService;
 import app.event.SuccessfulChargeEvent;
 import app.exception.DomainException;
-import app.gift.GiftService;
 import app.transaction.enums.TransactionStatus;
 import app.transaction.enums.TransactionType;
 import app.transaction.model.Transaction;
@@ -14,7 +12,6 @@ import app.wallet.model.Wallet;
 import app.wallet.repository.WalletRepository;
 import app.wallet.service.WalletService;
 import app.web.dto.TransferRequest;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -208,10 +205,23 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     @Transactional
-    public Transaction topUpBalance(UUID id) {
+    public Transaction topUpBalance(UUID walletId) {
         BigDecimal amount = new BigDecimal("20.00");
 
-        return deposit(id, amount, TOP_UP_DESCRIPTION_FORMAT.formatted(amount));
+        return deposit(walletId, amount, TOP_UP_DESCRIPTION_FORMAT.formatted(amount));
+    }
+
+    @Override
+    public void switchStatus(UUID walletId) {
+        Wallet wallet = getWalletById(walletId);
+
+        if (wallet.getStatus() == WalletStatus.ACTIVE) {
+            wallet.setStatus(WalletStatus.INACTIVE);
+        } else {
+            wallet.setStatus(WalletStatus.ACTIVE);
+        }
+
+        this.walletRepository.save(wallet);
     }
 
     private boolean isActiveWallet(Wallet wallet) {

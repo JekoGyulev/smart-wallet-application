@@ -24,4 +24,6 @@ public interface WalletService {
 
 
     Transaction topUpBalance(UUID id);
+
+    void switchStatus(UUID id);
 }

@@ -48,6 +48,11 @@ public class WalletController {
         return "redirect:/transactions/" + transaction.getId();
     }
 
+    @PatchMapping("/{id}/status")
+    public String switchWalletStatus(@PathVariable UUID id) {
+        this.walletService.switchStatus(id);
+        return "redirect:/wallets";
+    }
 
 
 
