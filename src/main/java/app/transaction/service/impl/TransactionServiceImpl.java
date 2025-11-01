@@ -6,6 +6,7 @@ import app.transaction.model.Transaction;
 import app.transaction.repository.TransactionRepository;
 import app.transaction.service.TransactionService;
 import app.user.model.User;
+import app.wallet.model.Wallet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -86,5 +87,18 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public Transaction getById(UUID id) {
         return this.transactionRepository.findById(id).orElseThrow(() -> new RuntimeException("Transaction not found"));
+    }
+
+    @Override
+    public List<Transaction> getLastFourTransactions(Wallet wallet) {
+
+        List<Transaction> lastFourTransactions = this.transactionRepository
+                .findAllBySenderOrReceiverOrderByCreatedOnDesc(wallet.getId().toString(), wallet.getId().toString())
+                .stream()
+                .filter(transaction -> transaction.getStatus() == TransactionStatus.SUCCEEDED)
+                .limit(4)
+                .toList();
+
+        return lastFourTransactions;
     }
 }

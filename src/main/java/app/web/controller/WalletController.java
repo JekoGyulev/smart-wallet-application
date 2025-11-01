@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -37,10 +38,14 @@ public class WalletController {
 
         List<Wallet> wallets = user.getWallets();
 
+        Map<UUID, List<Transaction>> transactionsByWalletId = this.walletService.getLastFourTransactions(wallets);
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("wallets");
         modelAndView.addObject("wallets", wallets);
         modelAndView.addObject("isEligibleToUnlock", WalletUtils.isEligibleToUnlockNewWallet(user));
+        modelAndView.addObject("transactionsByWalletId", transactionsByWalletId);
+
         return modelAndView;
     }
 

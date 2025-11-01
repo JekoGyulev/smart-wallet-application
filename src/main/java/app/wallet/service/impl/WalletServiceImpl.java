@@ -21,9 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Currency;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -147,8 +145,8 @@ public class WalletServiceImpl implements WalletService {
 
         return transactionService.createNewTransaction (
                 user,
-                SMART_WALLET_LTD,
                 walletId.toString(),
+                SMART_WALLET_LTD,
                 amount,
                 wallet.getBalance(),
                 wallet.getCurrency(),
@@ -182,16 +180,16 @@ public class WalletServiceImpl implements WalletService {
 
         Wallet receiverWallet = this.walletRepository.findWalletByOwnerUsername(transferRequest.getRecipientUsername())
                 .stream()
-                .filter(this::isActiveWallet)
+                .filter(Wallet::isPrimary)
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("[%s] doesn't have active wallets"
                         .formatted(transferRequest.getRecipientUsername())));
 
 
         String transferDescription = TRANSFER_DESCRIPTION_FORMAT
-                .formatted( senderWallet.getOwner().getUsername(),
-                            receiverWallet.getOwner().getUsername(),
-                            transferRequest.getAmount()
+                .formatted(senderWallet.getOwner().getUsername(),
+                        receiverWallet.getOwner().getUsername(),
+                        transferRequest.getAmount()
                 );
 
 
@@ -218,6 +216,9 @@ public class WalletServiceImpl implements WalletService {
         Wallet wallet = getWalletById(walletId);
 
         if (wallet.getStatus() == WalletStatus.ACTIVE) {
+            if (wallet.isPrimary()) {
+                throw new RuntimeException("Primary wallets cannot be inactive");
+            }
             wallet.setStatus(WalletStatus.INACTIVE);
         } else {
             wallet.setStatus(WalletStatus.ACTIVE);
@@ -275,6 +276,21 @@ public class WalletServiceImpl implements WalletService {
 
 
         this.walletRepository.save(newWallet);
+    }
+
+    @Override
+    public Map<UUID, List<Transaction>> getLastFourTransactions(List<Wallet> wallets) {
+
+        Map<UUID, List<Transaction>> transactionsByWalletId = new HashMap<>();
+
+        for (Wallet wallet : wallets) {
+
+            List<Transaction> lastFourTransactions = this.transactionService.getLastFourTransactions(wallet);
+
+            transactionsByWalletId.put(wallet.getId(), lastFourTransactions);
+        }
+
+        return transactionsByWalletId;
     }
 
     private boolean isActiveWallet(Wallet wallet) {

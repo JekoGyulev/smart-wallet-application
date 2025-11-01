@@ -4,6 +4,7 @@ import app.transaction.enums.TransactionStatus;
 import app.transaction.enums.TransactionType;
 import app.transaction.model.Transaction;
 import app.user.model.User;
+import app.wallet.model.Wallet;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -27,4 +28,6 @@ public interface TransactionService {
     long countTotalFailedTransactions();
 
     Transaction getById(UUID id);
+
+    List<Transaction> getLastFourTransactions(Wallet wallet);
 }

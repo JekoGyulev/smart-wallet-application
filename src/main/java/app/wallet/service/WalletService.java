@@ -6,6 +6,8 @@ import app.wallet.model.Wallet;
 import app.web.dto.TransferRequest;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public interface WalletService {
@@ -22,7 +24,6 @@ public interface WalletService {
 
     Transaction transfer(TransferRequest transferRequest);
 
-
     Transaction topUpBalance(UUID id);
 
     void switchStatus(UUID id);
@@ -30,4 +31,6 @@ public interface WalletService {
     void promoteWallet(UUID id);
 
     void unlockNewWallet(User user);
+
+    Map<UUID, List<Transaction>> getLastFourTransactions(List<Wallet> wallets);
 }
