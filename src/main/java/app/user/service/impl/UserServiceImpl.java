@@ -1,6 +1,7 @@
 package app.user.service.impl;
 
 import app.exception.DomainException;
+import app.notification.service.NotificationService;
 import app.security.UserData;
 import app.subscription.model.Subscription;
 import app.subscription.service.SubscriptionService;
@@ -40,16 +41,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final WalletService walletService;
     private final SubscriptionService subscriptionService;
+    private final NotificationService notificationService;
     private final PasswordEncoder passwordEncoder;
     private final UserProperties userProperties;
 
 
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, WalletService walletService, SubscriptionService subscriptionService, PasswordEncoder passwordEncoder, UserProperties userProperties) {
+    public UserServiceImpl(UserRepository userRepository, WalletService walletService, SubscriptionService subscriptionService, NotificationService notificationService, PasswordEncoder passwordEncoder, UserProperties userProperties) {
         this.userRepository = userRepository;
         this.walletService = walletService;
         this.subscriptionService = subscriptionService;
+        this.notificationService = notificationService;
         this.passwordEncoder = passwordEncoder;
         this.userProperties = userProperties;
     }
@@ -89,26 +92,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("Successfully created new user account for username [%s] and id [%s]"
                 .formatted(user.getUsername(), user.getId()));
 
+        this.notificationService.upsertPreference(user.getId(), false, null);
+
         return user;
     }
-
-//    @Override
-//    public User loginUser(LoginRequest request) {
-//
-//        Optional<User> optionalUser = this.userRepository.findByUsername(request.getUsername());
-//
-//        if (optionalUser.isEmpty()) {
-//            throw new DomainException("Username or password is incorrect");
-//        }
-//
-//        User user = optionalUser.get();
-//
-//        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-//            throw new DomainException("Username or password is incorrect");
-//        }
-//
-//        return user;
-//    }
 
     @Override
     public User getByUsername(String username) {
