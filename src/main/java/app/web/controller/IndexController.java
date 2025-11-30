@@ -2,12 +2,10 @@ package app.web.controller;
 
 import app.security.UserData;
 import app.user.model.User;
-import app.user.property.UserProperties;
 import app.user.service.UserService;
 import app.wallet.model.Wallet;
 import app.web.dto.LoginRequest;
 import app.web.dto.RegisterRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,7 +14,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.UUID;
 
 
 @Controller
