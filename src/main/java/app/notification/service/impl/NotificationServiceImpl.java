@@ -1,13 +1,19 @@
 package app.notification.service.impl;
 
 import app.notification.client.NotificationClient;
+import app.notification.client.dto.NotificationPreferenceResponse;
+import app.notification.client.dto.NotificationResponse;
 import app.notification.client.dto.UpsertPreferenceRequest;
 import app.notification.service.NotificationService;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -39,35 +45,19 @@ public class NotificationServiceImpl implements NotificationService {
 
     }
 
+    @Override
+    public NotificationPreferenceResponse getPreferenceByUserId(UUID userId) {
+        ResponseEntity<NotificationPreferenceResponse> preferenceByUserId = this.client.getPreferenceByUserId(userId);
+        return preferenceByUserId.getBody();
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @Override
+    public List<NotificationResponse> getLastNotificationsForUser(UUID userId) {
+        ResponseEntity<List<NotificationResponse>> notificationHistoryForUser = this.client.getNotificationHistoryForUser(userId);
+        return notificationHistoryForUser.getBody() != null
+                ? notificationHistoryForUser.getBody().stream().limit(5).toList()
+                : Collections.emptyList();
+    }
 
 
 }

@@ -1,15 +1,36 @@
 package app.web.controller;
 
+import app.notification.client.dto.NotificationPreferenceResponse;
+import app.notification.service.NotificationService;
+import app.security.UserData;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/notifications")
 public class NotificationController {
 
+    private final NotificationService notificationService;
+
+    @Autowired
+    public NotificationController(NotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
+
     @GetMapping
-    public String getNotificationsPage() {
-        return "notifications";
+    public ModelAndView getNotificationsPage(@AuthenticationPrincipal UserData userData) {
+
+        NotificationPreferenceResponse response = this.notificationService.getPreferenceByUserId(userData.getId());
+
+        ModelAndView modelAndView = new ModelAndView("notifications");
+
+        modelAndView.addObject("userNotificationPreference", response);
+        modelAndView.addObject("lastEmails", this.notificationService.getLastNotificationsForUser(userData.getId()));
+
+        return modelAndView;
     }
 }

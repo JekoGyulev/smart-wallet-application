@@ -183,6 +183,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @CacheEvict(value = "users", allEntries = true)
     public void updateProfile(User user, ProfileEditRequest profileEditRequest) {
 
+        if (profileEditRequest.getEmailAddress() != null && !profileEditRequest.getEmailAddress().isBlank()) {
+            this.notificationService.upsertPreference(user.getId(), true, profileEditRequest.getEmailAddress());
+        } else {
+            this.notificationService.upsertPreference(user.getId(), false, null);
+        }
+
         user.setFirstName(profileEditRequest.getFirstName());
         user.setLastName(profileEditRequest.getLastName());
         user.setEmail(profileEditRequest.getEmailAddress());
@@ -190,6 +196,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setUpdatedOn(LocalDateTime.now());
 
         this.userRepository.save(user);
+
+
     }
 
 
