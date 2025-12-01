@@ -13,4 +13,6 @@ public interface NotificationService {
     NotificationPreferenceResponse  getPreferenceByUserId(UUID userId);
 
     List<NotificationResponse> getLastNotificationsForUser(UUID userId);
+
+    void sendEmail(UUID userId, String subject, String body);
 }

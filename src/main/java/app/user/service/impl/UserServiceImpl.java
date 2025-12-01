@@ -196,8 +196,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setUpdatedOn(LocalDateTime.now());
 
         this.userRepository.save(user);
-
-
     }
 
 

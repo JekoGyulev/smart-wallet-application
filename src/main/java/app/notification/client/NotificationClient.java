@@ -1,5 +1,6 @@
 package app.notification.client;
 
+import app.notification.client.dto.CreateNotificationRequest;
 import app.notification.client.dto.NotificationPreferenceResponse;
 import app.notification.client.dto.NotificationResponse;
 import app.notification.client.dto.UpsertPreferenceRequest;
@@ -25,7 +26,8 @@ public interface NotificationClient {
     @GetMapping("/notifications")
     ResponseEntity<List<NotificationResponse>> getNotificationHistoryForUser(@RequestParam("user_id") UUID userId);
 
-
+    @PostMapping("/notifications")
+    ResponseEntity<Void> sendNotification(@RequestBody CreateNotificationRequest createNotificationRequest);
 
 
 

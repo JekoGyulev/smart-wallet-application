@@ -1,6 +1,7 @@
 package app.notification.service.impl;
 
 import app.notification.client.NotificationClient;
+import app.notification.client.dto.CreateNotificationRequest;
 import app.notification.client.dto.NotificationPreferenceResponse;
 import app.notification.client.dto.NotificationResponse;
 import app.notification.client.dto.UpsertPreferenceRequest;
@@ -57,6 +58,23 @@ public class NotificationServiceImpl implements NotificationService {
         return notificationHistoryForUser.getBody() != null
                 ? notificationHistoryForUser.getBody().stream().limit(5).toList()
                 : Collections.emptyList();
+    }
+
+    @Override
+    public void sendEmail(UUID userId, String subject, String body) {
+
+        CreateNotificationRequest createNotificationRequest = CreateNotificationRequest
+                .builder()
+                .userId(userId)
+                .subject(subject)
+                .body(body)
+                .build();
+
+        try {
+            this.client.sendNotification(createNotificationRequest);
+        } catch (FeignException e) {
+            log.error("[S2S Call]: Failed due to: {}", e.getMessage());
+        }
     }
 
 

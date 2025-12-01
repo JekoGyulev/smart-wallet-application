@@ -1,5 +1,6 @@
 package app.subscription.service.impl;
 
+import app.notification.service.NotificationService;
 import app.subscription.enums.SubscriptionPeriod;
 import app.subscription.enums.SubscriptionStatus;
 import app.subscription.enums.SubscriptionType;
@@ -29,13 +30,18 @@ import java.util.UUID;
 @Slf4j
 public class SubscriptionServiceImpl implements SubscriptionService {
 
+    private static final String UPGRADE_EMAIL_SUBJECT = "Successful plan upgrade";
+    private static final String UPGRADE_EMAIL_BODY = "You have successfully purchased %s plan with period %s for %.2f Euro, your new subscription will expire on %s";
+
     private final WalletService walletService;
+    private final NotificationService notificationService;
 
     private final SubscriptionRepository subscriptionRepository;
 
     @Autowired
-    public SubscriptionServiceImpl(WalletService walletService, SubscriptionRepository subscriptionRepository) {
+    public SubscriptionServiceImpl(WalletService walletService, NotificationService notificationService, SubscriptionRepository subscriptionRepository) {
         this.walletService = walletService;
+        this.notificationService = notificationService;
         this.subscriptionRepository = subscriptionRepository;
     }
 
@@ -155,6 +161,13 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         subscriptionRepository.save(currentlyActiveSubscription);
         subscriptionRepository.save(newActiveSubscription);
 
+
+        // Sending notification to user through the @FeignClient NotificationClient in NotificationService
+
+        String body =  String.format(UPGRADE_EMAIL_BODY, newActiveSubscription.getType(), newActiveSubscription.getPeriod(), newActiveSubscription.getPrice(), newActiveSubscription.getCompletedOn());
+
+        this.notificationService.sendEmail(user.getId(), UPGRADE_EMAIL_SUBJECT, body);
+
         return transaction;
     }
 
@@ -177,14 +190,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     private Subscription initSubscription(User user) {
-
-        /*
-            Type: DEFAULT,
-            Period: MONTHLY,
-            Price: €0 (free by default)
-            Renewal Eligibility: Renewals are only allowed for monthly subscriptions
-         */
-
         LocalDateTime now = LocalDateTime.now();
 
         return new Subscription (
