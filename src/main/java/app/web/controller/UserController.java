@@ -65,9 +65,7 @@ public class UserController {
             return modelAndView;
         }
 
-        User user = this.userService.getById(id);
-
-        this.userService.updateProfile(user, profileEditRequest);
+        this.userService.updateProfile(id, profileEditRequest);
 
         return new ModelAndView("redirect:/home");
     }

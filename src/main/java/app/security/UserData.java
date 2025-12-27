@@ -25,6 +25,7 @@ public class UserData implements UserDetails {
     private UserRole role;
     private boolean isActive;
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority role = new SimpleGrantedAuthority("ROLE_" + this.role.name());

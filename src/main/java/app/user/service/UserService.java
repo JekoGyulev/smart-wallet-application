@@ -30,5 +30,5 @@ public interface UserService {
     long countNonAdminUsers();
     long countUsersWithWallets(int countWallets);
 
-    void updateProfile(User user, ProfileEditRequest profileEditRequest);
+    void updateProfile(UUID userId, ProfileEditRequest profileEditRequest);
 }

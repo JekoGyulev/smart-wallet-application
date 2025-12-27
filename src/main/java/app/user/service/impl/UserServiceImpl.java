@@ -1,10 +1,12 @@
 package app.user.service.impl;
 
 import app.exception.DomainException;
+import app.exception.UserNotFound;
 import app.notification.service.NotificationService;
 import app.security.UserData;
 import app.subscription.model.Subscription;
 import app.subscription.service.SubscriptionService;
+import app.user.enums.Country;
 import app.user.enums.UserRole;
 import app.user.model.User;
 import app.user.property.UserProperties;
@@ -181,12 +183,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @CacheEvict(value = "users", allEntries = true)
-    public void updateProfile(User user, ProfileEditRequest profileEditRequest) {
+    public void updateProfile(UUID userId, ProfileEditRequest profileEditRequest) {
+
+        User user = this.userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFound("User was not found."));
 
         if (profileEditRequest.getEmailAddress() != null && !profileEditRequest.getEmailAddress().isBlank()) {
-            this.notificationService.upsertPreference(user.getId(), true, profileEditRequest.getEmailAddress());
+            this.notificationService.upsertPreference(userId, true, profileEditRequest.getEmailAddress());
         } else {
-            this.notificationService.upsertPreference(user.getId(), false, null);
+            this.notificationService.upsertPreference(userId, false, null);
         }
 
         user.setFirstName(profileEditRequest.getFirstName());
@@ -200,11 +205,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     private User initUser(RegisterRequest request, PasswordEncoder passwordEncoder) {
-        return new User (
-                            request.getUsername(),
-                            passwordEncoder.encode(request.getPassword()),
-                            request.getCountry()
-        );
+        return User.builder()
+                .username(request.getUsername())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .country(request.getCountry())
+                .isActive(true)
+                .role(UserRole.USER)
+                .createdOn(LocalDateTime.now())
+                .updatedOn(LocalDateTime.now())
+                .build();
+
     }
 
     // Всеки път при логин операция, Spring Security ще извиква този метод

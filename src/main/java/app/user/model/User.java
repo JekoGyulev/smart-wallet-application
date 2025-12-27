@@ -5,6 +5,8 @@ import app.user.enums.Country;
 import app.user.enums.UserRole;
 import app.wallet.model.Wallet;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,6 +15,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "users")
+@Builder
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -54,32 +58,32 @@ public class User {
     public User() {}
 
 
-    public User(String username, String firstName, String lastName, String profilePicture, String email, String password, UserRole role, Country country, boolean isActive, LocalDateTime createdOn, LocalDateTime updatedOn, List<Subscription> subscriptions, List<Wallet> wallets) {
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.profilePicture = profilePicture;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.country = country;
-        this.isActive = isActive;
-        this.createdOn = createdOn;
-        this.updatedOn = updatedOn;
-        this.subscriptions = subscriptions;
-        this.wallets = wallets;
-    }
-
-    // Used for registering users
-    public User(String username, String password, Country country) {
-        this.username = username;
-        this.password = password;
-        this.country = country;
-        this.isActive = true;
-        this.role = UserRole.USER;
-        this.createdOn = LocalDateTime.now();
-        this.updatedOn = LocalDateTime.now();
-    }
+//    public User(String username, String firstName, String lastName, String profilePicture, String email, String password, UserRole role, Country country, boolean isActive, LocalDateTime createdOn, LocalDateTime updatedOn, List<Subscription> subscriptions, List<Wallet> wallets) {
+//        this.username = username;
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.profilePicture = profilePicture;
+//        this.email = email;
+//        this.password = password;
+//        this.role = role;
+//        this.country = country;
+//        this.isActive = isActive;
+//        this.createdOn = createdOn;
+//        this.updatedOn = updatedOn;
+//        this.subscriptions = subscriptions;
+//        this.wallets = wallets;
+//    }
+//
+//    // Used for registering users
+//    public User(String username, String password, Country country) {
+//        this.username = username;
+//        this.password = password;
+//        this.country = country;
+//        this.isActive = true;
+//        this.role = UserRole.USER;
+//        this.createdOn = LocalDateTime.now();
+//        this.updatedOn = LocalDateTime.now();
+//    }
 
 
 

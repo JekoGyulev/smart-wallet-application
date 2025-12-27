@@ -2,8 +2,10 @@ package app.web.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import org.hibernate.validator.constraints.URL;
 
+@Builder
 public class ProfileEditRequest {
     @Size(min = 2, max = 100)
     private String firstName;
