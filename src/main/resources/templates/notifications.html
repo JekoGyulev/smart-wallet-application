@@ -187,20 +187,29 @@
 
                 <p>Change State:</p>
                 <div class="allowed-notification-actions">
-                    <button th:if="${userNotificationPreference.notificationEnabled}" class="profile-actions-button disable-notifications">
-                        <p>Disable Notifications</p>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                  stroke-linejoin="round"></path>
-                        </svg>
-                    </button>
-                    <button th:unless="${userNotificationPreference.notificationEnabled}" class="profile-actions-button enable-notifications">
-                        <p>Enable Notifications</p>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                  stroke-linejoin="round"></path>
-                        </svg>
-                    </button>
+                    <form th:if="${userNotificationPreference.notificationEnabled}"
+                          th:action="@{'/notifications/preference?state=OFF'}"
+                          th:method="PUT">
+                        <button type="submit" class="profile-actions-button disable-notifications">
+                            <p>Disable Notifications</p>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                      stroke-linejoin="round"></path>
+                            </svg>
+                        </button>
+                    </form>
+
+                    <form th:unless="${userNotificationPreference.notificationEnabled}"
+                          th:action="@{'/notifications/preference?state=ON'}"
+                          th:method="PUT">
+                        <button type="submit" class="profile-actions-button enable-notifications">
+                            <p>Enable Notifications</p>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                      stroke-linejoin="round"></path>
+                            </svg>
+                        </button>
+                    </form>
                 </div>
 
                 <p>General Actions:</p>

@@ -5,11 +5,14 @@ import app.notification.client.dto.NotificationResponse;
 import app.notification.service.NotificationService;
 import app.security.UserData;
 import app.utility.EmailUtils;
+import app.web.dto.NotificationPreferenceState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -42,4 +45,41 @@ public class NotificationController {
 
         return modelAndView;
     }
+
+
+    @PutMapping("/preference")
+    public String changeNotificationPreferenceState(@RequestParam("state")NotificationPreferenceState state,
+                                                    @AuthenticationPrincipal UserData userData) {
+
+        this.notificationService.updatePreferenceState(state, userData.getId(), userData.getEmail());
+        return "redirect:/notifications";
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

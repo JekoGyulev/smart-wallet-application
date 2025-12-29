@@ -6,6 +6,7 @@ import app.notification.client.dto.NotificationPreferenceResponse;
 import app.notification.client.dto.NotificationResponse;
 import app.notification.client.dto.UpsertPreferenceRequest;
 import app.notification.service.NotificationService;
+import app.web.dto.NotificationPreferenceState;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,42 @@ public class NotificationServiceImpl implements NotificationService {
             log.error("[S2S Call]: Failed due to: {}", e.getMessage());
         }
     }
+
+    @Override
+    public void updatePreferenceState(NotificationPreferenceState state, UUID id, String email) {
+
+        UpsertPreferenceRequest dto = UpsertPreferenceRequest.builder()
+                .userId(id)
+                .contactInfo(email)
+                .build();
+
+
+        if (state == NotificationPreferenceState.OFF) {
+            dto.setNotificationEnabled(false);
+        } else {
+            dto.setNotificationEnabled(true);
+        }
+
+
+        try {
+            this.client.upsertPreference(dto);
+        } catch (FeignException e ) {
+            log.error("[S2S Call]: Failed due to: {}", e.getMessage());
+        }
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
 
 
 }

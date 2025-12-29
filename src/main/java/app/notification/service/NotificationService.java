@@ -2,6 +2,7 @@ package app.notification.service;
 
 import app.notification.client.dto.NotificationPreferenceResponse;
 import app.notification.client.dto.NotificationResponse;
+import app.web.dto.NotificationPreferenceState;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,4 +16,13 @@ public interface NotificationService {
     List<NotificationResponse> getLastNotificationsForUser(UUID userId);
 
     void sendEmail(UUID userId, String subject, String body);
+
+    void updatePreferenceState(NotificationPreferenceState state, UUID id, String email);
+
+
+
+
+
+
+
 }

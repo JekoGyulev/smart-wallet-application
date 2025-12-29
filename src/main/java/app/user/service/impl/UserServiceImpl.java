@@ -227,6 +227,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
 
-        return new UserData(user.getId(), user.getUsername(), user.getPassword(), user.getRole(), user.isActive());
+        return new UserData(user.getId(), user.getUsername(), user.getPassword(), user.getEmail(), user.getRole(), user.isActive());
     }
 }
