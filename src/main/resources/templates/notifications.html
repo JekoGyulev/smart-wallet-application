@@ -212,6 +212,8 @@
                     </form>
                 </div>
 
+                <p class="alert-warning" th:if="${errorMessage != null}" th:text="${errorMessage}"></p>
+
                 <p>General Actions:</p>
                 <div class="allowed-notification-actions">
                     <form th:action="@{/notifications}" th:method="DELETE">
@@ -223,6 +225,8 @@
                             </svg>
                         </button>
                     </form>
+
+                    <form th:action="@{/notifications}" th:method="PUT">
                         <button class="profile-actions-button">
                             <p>Retry Failed</p>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -230,8 +234,6 @@
                                       fill="currentColor"/>
                             </svg>
                         </button>
-                    <form>
-
                     </form>
 
                 </div>

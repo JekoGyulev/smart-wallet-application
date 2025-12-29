@@ -29,6 +29,9 @@ public interface NotificationClient {
     @DeleteMapping("/notifications")
     ResponseEntity<Void> deleteNotifications(@RequestParam("userId") UUID userId);
 
+    @PutMapping("/notifications")
+    ResponseEntity<Void> retryFailedNotifications(@RequestParam("userId") UUID userId);
+
 
 
 

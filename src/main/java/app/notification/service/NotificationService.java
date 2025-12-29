@@ -21,6 +21,8 @@ public interface NotificationService {
 
     void deleteAllEmails(UUID userId);
 
+    void retryFailedNotifications(UUID userId);
+
 
 
 

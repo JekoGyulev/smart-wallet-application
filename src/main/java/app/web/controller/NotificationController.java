@@ -59,6 +59,12 @@ public class NotificationController {
         return "redirect:/notifications";
     }
 
+    @PutMapping
+    public String retryFailedNotifications(@AuthenticationPrincipal UserData userData) {
+        this.notificationService.retryFailedNotifications(userData.getId());
+        return "redirect:/notifications";
+    }
+
 
 
 

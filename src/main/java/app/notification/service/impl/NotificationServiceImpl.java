@@ -1,5 +1,6 @@
 package app.notification.service.impl;
 
+import app.exception.RetryFailedNotificationsException;
 import app.notification.client.NotificationClient;
 import app.notification.client.dto.CreateNotificationRequest;
 import app.notification.client.dto.NotificationPreferenceResponse;
@@ -113,6 +114,16 @@ public class NotificationServiceImpl implements NotificationService {
             this.client.deleteNotifications(userId);
         } catch (FeignException e) {
             log.error("[S2S Call]: Failed due to: {}", e.getMessage());
+        }
+    }
+
+    @Override
+    public void retryFailedNotifications(UUID userId) {
+        try {
+            this.client.retryFailedNotifications(userId);
+        } catch (FeignException e) {
+            log.error("[S2S Call]: Failed due to: {}", e.getMessage());
+            throw new RetryFailedNotificationsException("Unfortunately the operation could not succeed. Please try again later...");
         }
     }
 
