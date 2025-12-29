@@ -19,7 +19,7 @@ public interface NotificationService {
 
     void updatePreferenceState(NotificationPreferenceState state, UUID id, String email);
 
-
+    void deleteAllEmails(UUID userId);
 
 
 

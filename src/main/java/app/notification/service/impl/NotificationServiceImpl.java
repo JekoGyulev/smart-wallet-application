@@ -107,12 +107,14 @@ public class NotificationServiceImpl implements NotificationService {
 
     }
 
-
-
-
-
-
-
+    @Override
+    public void deleteAllEmails(UUID userId) {
+        try {
+            this.client.deleteNotifications(userId);
+        } catch (FeignException e) {
+            log.error("[S2S Call]: Failed due to: {}", e.getMessage());
+        }
+    }
 
 
 }
