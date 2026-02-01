@@ -1,7 +1,13 @@
 
-# 1 : Use Java (17,21..) as base image
+# Stage 1: Build the JAR
+FROM maven:3.9.0-eclipse-temurin-21 AS build
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+# Stage 2: Run the JAR
 FROM bellsoft/liberica-openjdk-alpine:21
-# 2 : Copy the Spring Boot JAR file into the container
-COPY target/smart-wallet-application-0.0.1-SNAPSHOT.jar app.jar
-# 3 : Define how to run the application
-ENTRYPOINT ["java", "-DSpring.profiles.active=prod", "-jar", "app.jar" ]
+WORKDIR /app
+COPY --from=build /app/target/smart-wallet-application-0.0.1-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
