@@ -11,6 +11,22 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: root123
+          MYSQL_DATABASE: smart_wallet_app
+          MYSQL_USER: root
+          MYSQL_PASSWORD: root123
+        ports:
+          - 3306:3306
+
+    env:
+      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/smart_wallet_app
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+
     steps:
     - name: Checkout the repository
       uses: actions/checkout@v4
