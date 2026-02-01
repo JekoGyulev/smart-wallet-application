@@ -57,6 +57,7 @@ public class UserServiceImplUTest {
         //Given
         UUID userId = UUID.randomUUID();
         ProfileEditRequest dto = null;
+
         when(userRepository.findById(any())).thenReturn(Optional.empty());
 
         // When and then
