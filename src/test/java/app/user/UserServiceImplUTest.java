@@ -56,8 +56,13 @@ public class UserServiceImplUTest {
 
         //Given
         UUID userId = UUID.randomUUID();
-        ProfileEditRequest dto = null;
-        when(userRepository.findById(any())).thenReturn(Optional.empty());
+        ProfileEditRequest dto = new ProfileEditRequest("Gosho", "Georgiev", "test@abv.bg", "www.picture.com");
+
+        User user = User.builder()
+                .firstName(dto.getFirstName())
+                .build();
+
+        when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
         // When and then
         assertThrows(UserNotFound.class, () -> userServiceImpl.updateProfile(userId, dto));
