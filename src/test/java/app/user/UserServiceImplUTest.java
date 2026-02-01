@@ -19,9 +19,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -164,7 +167,7 @@ public class UserServiceImplUTest {
 
         // Then
         assertEquals(UserRole.ADMIN, user.getRole());
-        assertEquals(LocalDateTime.now(), user.getUpdatedOn());
+        assertThat(user.getUpdatedOn()).isCloseTo(LocalDateTime.now(), within(1, ChronoUnit.SECONDS));
         verify(userRepository).save(user);
     }
 
@@ -183,8 +186,7 @@ public class UserServiceImplUTest {
 
         // Then
         assertEquals(UserRole.USER, user.getRole());
-//        assertThat(user.getUpdatedOn()).isCloseTo(LocalDateTime.now(), within(1, ChronoUnit.SECONDS));
-        assertEquals(LocalDateTime.now(), user.getUpdatedOn());
+        assertThat(user.getUpdatedOn()).isCloseTo(LocalDateTime.now(), within(1, ChronoUnit.SECONDS));
         verify(userRepository).save(user);
     }
 
